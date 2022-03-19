@@ -1,0 +1,66 @@
+package Pack2;
+
+import java.util.concurrent.Semaphore;
+
+public class class4b extends Thread{
+	Semaphore sm;
+	private int numbt;
+	static int op1=1;
+	static int op2=2;
+	private int x;
+	public class4b(Semaphore sm,int numbt) {
+		this.sm=sm;
+		this.numbt=numbt;
+	}
+	@Override
+	public void run() {
+		int op = (int)((Math.random()*2)+1);
+		while(x<1) {
+			if(op==op1 || op==op2) {
+				if(op==op1) {
+					op1=0;
+					opexec(numbt,op);
+					x=1;
+					op1=1;
+				}else if(op==op2){
+					op2=0;
+					opexec(numbt,op);
+					x=1;
+					op2=2;
+				}
+				
+			}
+		op = (int)((Math.random()*3)+1);
+		}
+		super.run();
+	}
+	public void opexec(int numbt,int op) {
+		try {
+			sm.acquire();
+			int cod=(int)((Math.random()*899)+100);
+			int s=(int)((Math.random()*1981)+20);
+			int tv=(int)((Math.random()*1981)+20);
+			if(tv>s) {
+				while(tv>s) {
+					tv=(int)((Math.random()*1981)+20);
+					if(tv<s) {
+						break;
+					}
+				}
+			}
+			switch(op){
+			case(1):
+				System.out.println("Thread: "+numbt+" realizando Saque");
+				System.out.println("Thread: "+numbt+" código da conta:"+cod+"saldo da conta: "+"valor a ser transacionado: "+tv);
+				break;
+			case(2):
+				System.out.println("Thread: "+numbt+" realizando Deposito");
+			    System.out.println("Thread: "+numbt+" código da conta:"+cod+"saldo da conta: "+"valor a ser transacionado: "+tv);
+				break;
+			}
+		}catch(Exception e) {
+		}finally{
+			sm.release();
+		}
+	}
+}
